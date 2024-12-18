@@ -1,13 +1,13 @@
 public class NovelList {
-    Novel head;
-    Novel tail;
+    NodeBukuPeminjam head;
+    NodeBukuPeminjam tail;
 
     public boolean isEmpty() {
         return head == null;
     }
 
     public void tambahNovel(String id, String judul, String penulis, String genre, int tahunTerbit) {
-        Novel novelBaru = new Novel(id, judul, penulis, genre, tahunTerbit);
+        NodeBukuPeminjam novelBaru = new NodeBukuPeminjam(id, judul, penulis, genre, tahunTerbit);
         if (isEmpty()) {
             head = novelBaru;
             tail = novelBaru;
@@ -33,7 +33,7 @@ public class NovelList {
             return;
         }
 
-        Novel temp = head;
+        NodeBukuPeminjam temp = head;
         while (temp.next != null && !temp.next.id.equals(id)) {
             temp = temp.next;
         }
@@ -57,7 +57,7 @@ public class NovelList {
             return;
         }
 
-        Novel temp = head;
+        NodeBukuPeminjam temp = head;
         System.out.println("======================================================================================================================");
         System.out.printf("%" + ((118 - 20)/2) + "s%s%n" , "" , "Koleksi Daftar Novel");
         System.out.println("======================================================================================================================");
@@ -79,8 +79,8 @@ public class NovelList {
         System.out.println("======================================================================================================================");
     }
 
-    public Novel cariNovel(String id) {
-        Novel temp = head;
+    public NodeBukuPeminjam cariNovel(String id) {
+        NodeBukuPeminjam temp = head;
         while (temp != null) {
             if (temp.id.equals(id)) {
                 return temp;
@@ -94,21 +94,21 @@ public class NovelList {
         head = mergeSort(head);
     }
     
-    private Novel mergeSort(Novel head) {
+    private NodeBukuPeminjam mergeSort(NodeBukuPeminjam head) {
         if (head == null || head.next == null) {
             return head;
         }
-        Novel tengah = getTengah(head);
-        Novel bagianKedua = tengah.next;
+        NodeBukuPeminjam tengah = getTengah(head);
+        NodeBukuPeminjam bagianKedua = tengah.next;
         tengah.next = null;
-        Novel bagianKiri = mergeSort(head);
-        Novel bagianKanan = mergeSort(bagianKedua);
+        NodeBukuPeminjam bagianKiri = mergeSort(head);
+        NodeBukuPeminjam bagianKanan = mergeSort(bagianKedua);
     
         return merge(bagianKiri, bagianKanan);
     }
     
-    private Novel merge(Novel kiri, Novel kanan) {
-        Novel head;
+    private NodeBukuPeminjam merge(NodeBukuPeminjam kiri, NodeBukuPeminjam kanan) {
+        NodeBukuPeminjam head;
         if (kiri.judul.compareToIgnoreCase(kanan.judul) <= 0) {
             head = kiri;
             kiri = kiri.next;
@@ -117,7 +117,7 @@ public class NovelList {
             kanan = kanan.next;
         }
     
-        Novel current = head;
+        NodeBukuPeminjam current = head;
         while (kiri != null && kanan != null) {
             if (kiri.judul.compareToIgnoreCase(kanan.judul) <= 0) {
                 current.next = kiri;
@@ -132,12 +132,12 @@ public class NovelList {
         return head;
     }
     
-    private Novel getTengah(Novel head) {
+    private NodeBukuPeminjam getTengah(NodeBukuPeminjam head) {
         if (head == null) {
             return null;
         }
-        Novel slow = head;
-        Novel fast = head.next;
+        NodeBukuPeminjam slow = head;
+        NodeBukuPeminjam fast = head.next;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;

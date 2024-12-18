@@ -57,34 +57,41 @@ class PenggunaList {
             temp = temp.next;
         }
     }
-    public boolean signIn(String username, String password){
-        boolean usernameExist = false;
+
+    public int signIn(String username, String password){
+        int usernameState = 0;
+        if(username.equals("Admin")){
+            return usernameState = 2;
+        }
 
         Pengguna temp = head;
         while (temp != null) {
             if(temp.username.equals(username)){
-                System.out.println("Username telah diambil");
-                usernameExist = true;
+                usernameState = 1;
+                break;
             }
             temp = temp.next;
         }
-        return usernameExist;
+        return usernameState;
     }
 
-    public boolean logIn(String username, String password){
-        boolean logInSukses = false;
+    public int logIn(String username, String password){
+        int logInState = 1;
+        if(username.equals("Admin") && password.equals(("Admin"))){
+            return logInState = 2;
+        }
         if(isEmpty()){
-            return false;
+            return 1;
         }
 
         Pengguna temp = head;
         while (temp != null) {
             if(temp.username.equals(username) && temp.password.equals(password)){
-                logInSukses = true;
+                logInState = 0;
                 break;
             }
             temp = temp.next;
         }
-        return logInSukses;
+        return logInState;
     }
 }

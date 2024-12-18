@@ -1,12 +1,12 @@
-public class Novel {
+public class NodeBukuPeminjam {
     String id;
     String judul;
     String penulis;
     String genre;
     int tahunTerbit;
-    Novel next;
+    NodeBukuPeminjam next;
 
-    public Novel(String id, String judul, String penulis, String genre, int tahunTerbit) {
+    public NodeBukuPeminjam(String id, String judul, String penulis, String genre, int tahunTerbit) {
         this.id = id;
         this.judul = judul;
         this.penulis = penulis;
