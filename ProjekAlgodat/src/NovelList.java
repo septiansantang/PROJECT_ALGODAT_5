@@ -90,36 +90,47 @@ public class NovelList {
         return null;
     }
 
-    public void urutkanNovelByJudul() {
-        head = mergeSort(head);
+    public void urutkanNovel(int pilihan) {
+        switch (pilihan) {
+            case 1: head = mergeSort(head, "id"); break;
+            case 2: head = mergeSort(head, "judul"); break;
+            case 3: head = mergeSort(head, "penulis"); break;
+            case 4: head = mergeSort(head, "tahunTerbit"); break;
+            default: System.out.println("Pilihan invalid."); break;
+        }
     }
     
-    private Novel mergeSort(Novel head) {
+    private Novel mergeSort(Novel head, String kriteria) {
         if (head == null || head.next == null) {
             return head;
         }
+
         Novel tengah = getTengah(head);
         Novel bagianKedua = tengah.next;
         tengah.next = null;
-        Novel bagianKiri = mergeSort(head);
-        Novel bagianKanan = mergeSort(bagianKedua);
-    
-        return merge(bagianKiri, bagianKanan);
+
+        Novel bagianKiri = mergeSort(head, kriteria);
+        Novel bagianKanan = mergeSort(bagianKedua, kriteria);
+
+        return merge(bagianKiri, bagianKanan, kriteria);
     }
+
     
-    private Novel merge(Novel kiri, Novel kanan) {
+    private Novel merge(Novel kiri, Novel kanan, String kriteria) {
         Novel head;
-        if (kiri.judul.compareToIgnoreCase(kanan.judul) <= 0) {
+
+        if (compare(kiri, kanan, kriteria) <= 0) {
             head = kiri;
             kiri = kiri.next;
         } else {
             head = kanan;
             kanan = kanan.next;
         }
-    
+
         Novel current = head;
+
         while (kiri != null && kanan != null) {
-            if (kiri.judul.compareToIgnoreCase(kanan.judul) <= 0) {
+            if (compare(kiri, kanan, kriteria) <= 0) {
                 current.next = kiri;
                 kiri = kiri.next;
             } else {
@@ -128,8 +139,20 @@ public class NovelList {
             }
             current = current.next;
         }
+
         current.next = (kiri != null) ? kiri : kanan;
+
         return head;
+    }
+
+    private int compare(Novel a, Novel b, String kriteria) {
+        switch (kriteria) {
+            case "id": return a.id.compareToIgnoreCase(b.id);
+            case "judul": return a.judul.compareToIgnoreCase(b.judul);
+            case "penulis": return a.penulis.compareToIgnoreCase(b.penulis);
+            case "tahunTerbit": return Integer.compare(a.tahunTerbit, b.tahunTerbit);
+            default: return 0;
+        }
     }
     
     private Novel getTengah(Novel head) {
