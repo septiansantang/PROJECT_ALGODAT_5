@@ -57,7 +57,7 @@ public class Main {
                         int pilihanMenu;
                         do {
                             header("Menu Utama - Perpustakaan Novel");
-                            System.out.println("\n1. Tambah Novel");
+                            System.out.println("1. Tambah Novel");
                             System.out.println("2. Hapus Novel");
                             System.out.println("3. Tampilkan Semua Novel");
                             System.out.println("4. Cari Novel Berdasarkan ID");
@@ -93,8 +93,15 @@ public class Main {
                                     System.out.print("Urutkan Novel? (y/n): ");
                                     String urutkan = scanner.nextLine();
                                     if (urutkan.equalsIgnoreCase("y")) {
-                                        daftarNovel.urutkanNovelByJudul();
-                                        daftarNovel.tampilkanNovel();
+                                        System.out.println("1. Urutkan berdasarkan ID");
+                                        System.out.println("2. Urutkan berdasarkan Judul");
+                                        System.out.println("3. Urutkan berdasarkan Penulis");
+                                        System.out.println("4. Urutkan berdasarkan Tahun");
+                                        System.out.print("Masukkan pilihan: ");
+                                        int pilihanUrutan = scanner.nextInt();
+                                        scanner.nextLine();
+                                        daftarNovel.urutkanNovel(pilihanUrutan);
+                                        daftarNovel.tampilkanNovel();                                  
                                     }
                                     break;
 
@@ -103,8 +110,10 @@ public class Main {
                                     id = scanner.nextLine();
                                     Novel novel = daftarNovel.cariNovel(id);
                                     if (novel != null) {
-                                        System.out.println("Novel ditemukan: Judul: " + novel.judul + ", Penulis: "
-                                                + novel.penulis);
+                                        System.out.println("Novel ditemukan!");
+                                        System.out.println("====================================");
+                                        System.out.println("Judul: " + novel.judul + "\nPenulis: "+ novel.penulis);
+                                        System.out.println("====================================");
                                     } else {
                                         System.out.println("Novel dengan ID " + id + " tidak ditemukan.");
                                     }
