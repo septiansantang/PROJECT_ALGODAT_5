@@ -1,13 +1,18 @@
 public class NovelList {
-    Novel head;
-    Novel tail;
+    NodeBukuPeminjam head;
+    NodeBukuPeminjam tail;
+    BSTBuku bst;
+
+    public NovelList() {
+        this.bst = new BSTBuku();
+    }
 
     public boolean isEmpty() {
         return head == null;
     }
 
     public void tambahNovel(String id, String judul, String penulis, String genre, int tahunTerbit) {
-        Novel novelBaru = new Novel(id, judul, penulis, genre, tahunTerbit);
+        NodeBukuPeminjam novelBaru = new NodeBukuPeminjam(id, judul, penulis, genre, tahunTerbit);
         if (isEmpty()) {
             head = novelBaru;
             tail = novelBaru;
@@ -15,9 +20,50 @@ public class NovelList {
             tail.next = novelBaru;
             tail = novelBaru;
         }
+        bst.insert(novelBaru); // Add novel to BST
         System.out.println("Novel berhasil ditambahkan: " + judul);
     }
 
+    public void tampilkanNovel() {
+        if (isEmpty()) {
+            System.out.println("====================================================");
+            System.out.println("|               Daftar Novel Kosong               |");
+            System.out.println("====================================================");
+            return;
+        }
+
+        NodeBukuPeminjam temp = head;
+        System.out.println(
+                "======================================================================================================================");
+        System.out.printf("%" + ((118 - 20) / 2) + "s%s%n", "", "Koleksi Daftar Novel");
+        System.out.println(
+                "======================================================================================================================");
+
+        int nomor = 1;
+        System.out.printf("| %-3s | %-7s | %-45s | %-22s | %-10s | %-12s |\n", "No", "ID", "Judul", "Penulis", "Genre",
+                "Tahun Terbit");
+        System.out.println(
+                "|-----|---------|-----------------------------------------------|------------------------|------------|--------------|");
+
+        while (temp != null) {
+            System.out.printf("| %-3s | %-7s | %-45s | %-22s | %-10s | %-12s |\n",
+                    nomor++,
+                    temp.id,
+                    temp.judul,
+                    temp.penulis,
+                    temp.genre,
+                    temp.tahunTerbit);
+            temp = temp.next;
+        }
+        System.out.println(
+                "======================================================================================================================");
+    }
+
+    public NodeBukuPeminjam cariNovel(String idBuku) {
+        NodeBukuPeminjam result = bst.search(idBuku);
+        return result;
+    }
+    
     public void hapusNovel(String id) {
         if (isEmpty()) {
             System.out.println("Daftar novel kosong.");
@@ -33,7 +79,7 @@ public class NovelList {
             return;
         }
 
-        Novel temp = head;
+        NodeBukuPeminjam temp = head;
         while (temp.next != null && !temp.next.id.equals(id)) {
             temp = temp.next;
         }
@@ -49,47 +95,6 @@ public class NovelList {
         }
     }
 
-    public void tampilkanNovel() {
-        if (isEmpty()) {
-            System.out.println("====================================================");
-            System.out.println("|               Daftar Novel Kosong               |");
-            System.out.println("====================================================");
-            return;
-        }
-
-        Novel temp = head;
-        System.out.println("======================================================================================================================");
-        System.out.printf("%" + ((118 - 20)/2) + "s%s%n" , "" , "Koleksi Daftar Novel");
-        System.out.println("======================================================================================================================");
-
-        int nomor = 1;
-        System.out.printf("| %-3s | %-7s | %-45s | %-22s | %-10s | %-12s |\n", "No", "ID", "Judul", "Penulis", "Genre", "Tahun Terbit");
-        System.out.println("|-----|---------|-----------------------------------------------|------------------------|------------|--------------|");
-
-        while (temp != null) {
-            System.out.printf("| %-3s | %-7s | %-45s | %-22s | %-10s | %-12s |\n",
-                    nomor++,
-                    temp.id,
-                    temp.judul,
-                    temp.penulis,
-                    temp.genre,
-                    temp.tahunTerbit);
-            temp = temp.next;
-        }
-        System.out.println("======================================================================================================================");
-    }
-
-    public Novel cariNovel(String id) {
-        Novel temp = head;
-        while (temp != null) {
-            if (temp.id.equals(id)) {
-                return temp;
-            }
-            temp = temp.next;
-        }
-        return null;
-    }
-
     public void urutkanNovel(int pilihan) {
         switch (pilihan) {
             case 1: head = mergeSort(head, "id"); break;
@@ -99,25 +104,22 @@ public class NovelList {
             default: System.out.println("Pilihan invalid."); break;
         }
     }
-    
-    private Novel mergeSort(Novel head, String kriteria) {
+
+    private NodeBukuPeminjam mergeSort(NodeBukuPeminjam head, String kriteria) {
         if (head == null || head.next == null) {
             return head;
         }
-
-        Novel tengah = getTengah(head);
-        Novel bagianKedua = tengah.next;
+        NodeBukuPeminjam tengah = getTengah(head);
+        NodeBukuPeminjam bagianKedua = tengah.next;
         tengah.next = null;
 
-        Novel bagianKiri = mergeSort(head, kriteria);
-        Novel bagianKanan = mergeSort(bagianKedua, kriteria);
-
+        NodeBukuPeminjam bagianKiri = mergeSort(head, kriteria);
+        NodeBukuPeminjam bagianKanan = mergeSort(bagianKedua, kriteria);
         return merge(bagianKiri, bagianKanan, kriteria);
     }
 
-    
-    private Novel merge(Novel kiri, Novel kanan, String kriteria) {
-        Novel head;
+    private NodeBukuPeminjam merge(NodeBukuPeminjam kiri, NodeBukuPeminjam kanan, String kriteria) {
+        NodeBukuPeminjam head;
 
         if (compare(kiri, kanan, kriteria) <= 0) {
             head = kiri;
@@ -127,8 +129,7 @@ public class NovelList {
             kanan = kanan.next;
         }
 
-        Novel current = head;
-
+        NodeBukuPeminjam current = head;
         while (kiri != null && kanan != null) {
             if (compare(kiri, kanan, kriteria) <= 0) {
                 current.next = kiri;
@@ -145,7 +146,7 @@ public class NovelList {
         return head;
     }
 
-    private int compare(Novel a, Novel b, String kriteria) {
+    private int compare(NodeBukuPeminjam a, NodeBukuPeminjam b, String kriteria) {
         switch (kriteria) {
             case "id": return a.id.compareToIgnoreCase(b.id);
             case "judul": return a.judul.compareToIgnoreCase(b.judul);
@@ -154,13 +155,13 @@ public class NovelList {
             default: return 0;
         }
     }
-    
-    private Novel getTengah(Novel head) {
+
+    private NodeBukuPeminjam getTengah(NodeBukuPeminjam head) {
         if (head == null) {
             return null;
         }
-        Novel slow = head;
-        Novel fast = head.next;
+        NodeBukuPeminjam slow = head;
+        NodeBukuPeminjam fast = head.next;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;

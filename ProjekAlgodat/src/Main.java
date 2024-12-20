@@ -19,6 +19,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         PenggunaList listPengguna = new PenggunaList();
         NovelList daftarNovel = new NovelList();
+        QueuePeminjam antrianPeminjam = new QueuePeminjam();
+        StackBuku bukuPeminjam = new StackBuku();
         daftarNovel.tambahNovel("N001", "Laskar Pelangi", "Andrea Hirata", "Drama", 2005);
         daftarNovel.tambahNovel("N002", "Dilan 1990", "Pidi Baiq", "Romansa", 2014);
         daftarNovel.tambahNovel("N003", "Bumi", "Tere Liye", "Fantasi", 2014);
@@ -43,20 +45,94 @@ public class Main {
             scanner.nextLine();
 
             switch (pilihan) {
-                case 1: 
+                case 1:
                     System.out.println("Log-In Screen");
                     System.out.print("Username: ");
                     String username = scanner.nextLine();
                     System.out.print("Password: ");
                     String password = scanner.nextLine();
-                    boolean logInSukses = listPengguna.logIn(username, password);
+                    int logInState = listPengguna.logIn(username, password);
 
-                    if (logInSukses) {
+                    if (logInState == 0) {
                         System.out.println("Log-In Berhasil! Selamat datang, " + username);
 
                         int pilihanMenu;
                         do {
                             header("Menu Utama - Perpustakaan Novel");
+                            System.out.println("1. Antri Pinjam Novel");
+                            System.out.println("2. Tampilkan Antrian Peminjaman");
+                            System.out.println("3. Tampilkan Semua Novel");
+                            System.out.println("4. Cari Novel Berdasarkan ID");
+                            System.out.println("5. Tambah Novel Berdasarkan ID");
+                            System.out.println("6. Refresh Antrian");
+                            System.out.println("7. Logout");
+                            System.out.print("Masukkan pilihan: ");
+                            pilihanMenu = scanner.nextInt();
+                            scanner.nextLine();
+
+                            switch (pilihanMenu) {
+                                case 1:
+                                    antrianPeminjam.enqueue(username, daftarNovel);
+                                    break;
+                                case 2:
+                                    antrianPeminjam.tampilkan();
+                                    break;
+                                case 3:
+                                    daftarNovel.tampilkanNovel();
+                                    System.out.print("Urutkan Novel? (y/n): ");
+                                    String urutkan = scanner.nextLine();
+                                    if (urutkan.equalsIgnoreCase("y")) {
+                                        System.out.println("1. Urutkan berdasarkan ID");
+                                        System.out.println("2. Urutkan berdasarkan Judul");
+                                        System.out.println("3. Urutkan berdasarkan Penulis");
+                                        System.out.println("4. Urutkan berdasarkan Tahun");
+                                        System.out.print("Masukkan pilihan: ");
+                                        int pilihanUrutan = scanner.nextInt();
+                                        scanner.nextLine();
+                                        daftarNovel.urutkanNovel(pilihanUrutan);
+                                        daftarNovel.tampilkanNovel();                                  
+                                    }
+                                    break;
+
+                                case 4:
+                                    System.out.print("Masukkan ID Novel yang dicari: ");
+                                    String id = scanner.nextLine();
+                                    NodeBukuPeminjam novel = daftarNovel.cariNovel(id);
+                                    if (novel != null) {
+                                        System.out.println("Novel ditemukan!");
+                                        System.out.println("====================================");
+                                        System.out.println("Judul: " + novel.judul + "\nPenulis: " + novel.penulis);
+                                        System.out.println("====================================");
+                                    } else {
+                                        System.out.println("Novel dengan ID " + id + " tidak ditemukan.");
+                                    }
+                                    break;
+
+                                case 5:
+                                    System.out.print("Masukkan ID Novel yang dicari: ");
+                                    id = scanner.nextLine();
+                                    novel = daftarNovel.cariNovel(id);
+                                    bukuPeminjam.push(novel);
+                                    break;
+
+                                case 6:
+                                    antrianPeminjam.refreshQueue();
+                                    break;
+                                case 7:
+                                    System.out.println("Anda telah logout. Kembali ke menu awal.");
+                                    break;
+
+                                default:
+                                    System.out.println("Pilihan invalid.");
+                                    break;
+                            }
+                        } while (pilihanMenu != 7);
+                    } else if (logInState == 1) {
+                        System.out.println("Log-In Gagal! Username atau password salah.");
+                    } else if (logInState == 2) {
+                        int pilihanMenu;
+                        do {
+                            header("Menu Admin - Perpustakaan Novel");
                             System.out.println("1. Tambah Novel");
                             System.out.println("2. Hapus Novel");
                             System.out.println("3. Tampilkan Semua Novel");
@@ -108,11 +184,11 @@ public class Main {
                                 case 4:
                                     System.out.print("Masukkan ID Novel yang dicari: ");
                                     id = scanner.nextLine();
-                                    Novel novel = daftarNovel.cariNovel(id);
+                                    NodeBukuPeminjam novel = daftarNovel.cariNovel(id);
                                     if (novel != null) {
                                         System.out.println("Novel ditemukan!");
                                         System.out.println("====================================");
-                                        System.out.println("Judul: " + novel.judul + "\nPenulis: "+ novel.penulis);
+                                        System.out.println("Judul: " + novel.judul + "\nPenulis: " + novel.penulis);
                                         System.out.println("====================================");
                                     } else {
                                         System.out.println("Novel dengan ID " + id + " tidak ditemukan.");
@@ -128,27 +204,28 @@ public class Main {
                                     break;
                             }
                         } while (pilihanMenu != 5);
-                    } else {
-                        System.out.println("Log-In Gagal! Username atau password salah.");
                     }
                     break;
 
                 case 2:
+
                     System.out.println("Sign-In Screen");
                     System.out.print("Username: ");
                     String usernameBaru = scanner.nextLine();
                     System.out.print("Password: ");
                     String passwordBaru = scanner.nextLine();
-                    boolean signInGagal = listPengguna.signIn(usernameBaru, passwordBaru);
+                    int signInState = listPengguna.signIn(usernameBaru, passwordBaru);
 
-                    if (signInGagal) {
+                    if (signInState == 1) {
                         System.out.println("Gagal Sign-In. Username sudah digunakan.");
-                    } else {
+                    } else if (signInState == 0) {
                         listPengguna.tambah(usernameBaru, passwordBaru);
                         System.out.println("Sign-In Berhasil! Silakan Log-In untuk melanjutkan.");
+                    } else if (signInState == 2) {
+                        System.out.println("Gagal Sign-In. Username tidak boleh Admin");
                     }
                     break;
-                case 3: 
+                case 3:
                     listPengguna.tampilkan();
                     break;
                 case 4:
