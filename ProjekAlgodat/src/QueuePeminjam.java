@@ -43,8 +43,6 @@ public class QueuePeminjam {
             }
         }
 
-        scanner.close();
-
         if (isEmpty()) {
             front = newNode;
         } else {
