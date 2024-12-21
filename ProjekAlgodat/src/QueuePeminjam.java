@@ -22,18 +22,18 @@ public class QueuePeminjam {
         boolean lagi = true;
 
         while (lagi) {
-            System.out.print("Masukkan judul buku yang ingin dipinjam: ");
-            String judulBuku = scanner.nextLine();
+            System.out.print("Masukkan ID buku yang ingin dipinjam: ");
+            String idBuku = scanner.nextLine();
 
             // Cari buku di novelList global
-            NodeBukuPeminjam bukuDipinjam = novelList.cariNovel(judulBuku);
+            NodeBukuPeminjam bukuDipinjam = novelList.cariNovel(idBuku);
             if (bukuDipinjam == null) {
-                System.out.println("Buku dengan judul '" + judulBuku + "' tidak ditemukan.");
+                System.out.println("Buku dengan ID '" + idBuku + "' tidak ditemukan.");
             } else {
                 newNode.buku.push(bukuDipinjam.id, bukuDipinjam.judul, bukuDipinjam.penulis, bukuDipinjam.genre,
                         bukuDipinjam.tahunTerbit);
                 novelList.hapusNovel(bukuDipinjam.id);
-                System.out.println("Buku '" + judulBuku + "' berhasil dipinjam.");
+                System.out.println("Buku '" + idBuku + "' berhasil dipinjam.");
             }
 
             System.out.print("Ingin meminjam buku lain? (y/n): ");
