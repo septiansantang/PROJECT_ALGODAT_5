@@ -32,8 +32,8 @@ public class QueuePeminjam {
             } else {
                 newNode.buku.push(bukuDipinjam.id, bukuDipinjam.judul, bukuDipinjam.penulis, bukuDipinjam.genre,
                         bukuDipinjam.tahunTerbit);
-                novelList.hapusNovel(bukuDipinjam.id);
                 System.out.println("Buku '" + idBuku + "' berhasil dipinjam.");
+                novelList.hapusNovel(bukuDipinjam.id);
             }
 
             System.out.print("Ingin meminjam buku lain? (y/n): ");
