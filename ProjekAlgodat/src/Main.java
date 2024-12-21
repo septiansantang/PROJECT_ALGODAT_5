@@ -35,7 +35,7 @@ public class Main {
         int pilihan;
 
         do {
-            header("Perpustakaan Novel Ian");
+            header("Perpustakaan Novel");
             System.out.println("1. Log-In");
             System.out.println("2. Sign-In");
             System.out.println("3. Daftar Pengguna");
