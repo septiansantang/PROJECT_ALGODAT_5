@@ -109,9 +109,8 @@ public class Main {
                             System.out.println("2. Tampilkan Antrian Peminjaman");
                             System.out.println("3. Tampilkan Semua Novel");
                             System.out.println("4. Cari Novel Berdasarkan ID");
-                            System.out.println("5. Tambah Novel Berdasarkan ID");
-                            System.out.println("6. Refresh Antrian");
-                            System.out.println("7. Logout");
+                            System.out.println("5. Refresh Antrian");
+                            System.out.println("6. Logout");
                             System.out.print("Masukkan pilihan: ");
                             pilihanMenu = scanner.nextInt();
                             scanner.nextLine();
@@ -155,16 +154,9 @@ public class Main {
                                     break;
 
                                 case 5:
-                                    System.out.print("Masukkan ID Novel yang dicari: ");
-                                    id = scanner.nextLine();
-                                    novel = daftarNovel.cariNovel(id);
-                                    bukuPeminjam.push(novel);
-                                    break;
-
-                                case 6:
                                     antrianPeminjam.refreshQueue();
                                     break;
-                                case 7:
+                                case 6:
                                     System.out.println("Anda telah logout. Kembali ke menu awal.");
                                     break;
 
@@ -172,7 +164,7 @@ public class Main {
                                     System.out.println("Pilihan invalid.");
                                     break;
                             }
-                        } while (pilihanMenu != 7);
+                        } while (pilihanMenu != 6);
                     } else if (logInState == 1) {
                         System.out.println("Log-In Gagal! Username atau password salah.");
                     } else if (logInState == 2) {
