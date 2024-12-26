@@ -21,31 +21,6 @@ class PenggunaList {
         }
     }
 
-    public void hapus(String username) {
-        if (isEmpty()) {
-            return;
-        }
-
-        if (head.username.equals(username)) {
-            head = head.next;
-            if (head == tail) {
-                tail = null;
-            }
-            return;
-        }
-
-        Pengguna temp = head;
-        while (temp.next != null && temp.next.username.equals(username)) {
-            temp = temp.next;
-        }
-
-        if (temp.next != null) {
-            temp.next = temp.next.next;
-        } else {
-            System.out.println("Pengguna dengan username " + username + " tidak ditemukan");
-        }
-    }
-
     public void tampilkan() {
         if (isEmpty()) {
             return;
